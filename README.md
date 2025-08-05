@@ -75,6 +75,10 @@ python --version
 pip --version
 ```
 ## Development Stage
+For simplicity, you can copy paste and run this command
+```
+pip install -r requirements.txt
+```
 
 #### Python Serial
 ```
