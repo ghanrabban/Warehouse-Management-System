@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  db:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: wms_demo
+      MYSQL_USER: wms_user
+      MYSQL_PASSWORD: wms_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    command:
+      [
+        "--default-time-zone=+07:00"
+      ]
+
+  app:
+    build: .
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: wms_user
+      DB_PASS: wms_pass
+      DB_NAME: wms_demo
+    depends_on:
+      db:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
+
+volumes:
+  db_data:
