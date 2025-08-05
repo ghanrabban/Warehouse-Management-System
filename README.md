@@ -148,6 +148,18 @@ python -m pip install Django==5.2.4
 pip install django-currentuser
 ```
 
+## How to Compose and Containerizing MySQL into Docker
+
+```
+docker compose down
+docker compose up -d
+```
+
+After that, you need to build a conternizer Docker Container
+```
+docker compose up --build
+```
+
 ## How to Run a Debug Server
 Open the specific directory
 ```
