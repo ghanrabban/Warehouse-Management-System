@@ -74,6 +74,36 @@ brew install python
 python --version
 pip --version
 ```
+
+### Installing Git
+For convenient, perhaps you need to instal Git on your machine.
+
+#### For Windows
+```
+winget install --id Git.Git -e --source winget
+```
+
+#### For Linux Debian
+```
+apt-get install git
+```
+
+#### For Linux Fedora
+```
+dnf install git
+```
+
+#### For MacOS
+```
+brew install git-gui
+```
+
+## Adding this repository into your PC
+If you are using windows, 
+```
+git clone https://github.com/ghanrabban/Warehouse-Management-System.git
+```
+
 ## Development Stage
 For simplicity, you can copy paste and run this command
 ```
