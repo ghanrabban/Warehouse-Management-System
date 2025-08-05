@@ -100,9 +100,21 @@ brew install git-gui
 
 ## Adding this repository into your PC
 Open your CMD on Windows, or Terminal on Linux, or Homebrew for MacOS
+
 Copy paste and run this command
 ```
 git clone https://github.com/ghanrabban/Warehouse-Management-System.git
+```
+
+After you dwonload the repo, you can find it manually on the default location (Usually for Windows at C:\Users\[Name])
+#### Windows
+```
+cd C:\(GitHub Repo Location)
+```
+
+#### Linux and MacOS
+```
+cd /home/(GitHub Repo Location)
 ```
 
 ## Development Stage
