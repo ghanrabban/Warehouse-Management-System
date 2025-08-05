@@ -1,0 +1,15 @@
+{# scanner/templates/scanner/today_roster.html #}
+{% extends "scanner/base.html" %}
+{% block content %}
+  <h1>Roster for {{ rosters.0.date|date:"d/m/Y" }}</h1>
+  <ul>
+  {% for roster in rosters %}
+    <li>
+      <strong>{{ roster.get_shift_display }} Shift:</strong>
+      {{ roster.users.all|join:", " }}
+    </li>
+  {% empty %}
+    <li>No roster defined for today.</li>
+  {% endfor %}
+  </ul>
+{% endblock %}

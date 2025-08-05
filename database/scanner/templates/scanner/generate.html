@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head><title>Generate Barcode</title></head>
+  <body>
+  </nav>
+    <h1>Generate Barcode</h1>
+    <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Generate</button>
+    </form>
+    <p><a href="{% url 'event_list' %}">Back to events</a></p>
+  </body>
+</html>

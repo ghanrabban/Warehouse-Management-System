@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   db:
     image: mysql:8
@@ -13,17 +12,15 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-psecret"]
       interval: 5s
       timeout: 3s
       retries: 5
-    command:
-      [
-        "--default-time-zone=+07:00"
-      ]
 
   app:
-    build: .
+    build:
+      context: ..
+      dockerfile: docker_wms/Dockerfile.cli
     environment:
       DB_HOST: db
       DB_PORT: 3306
@@ -31,10 +28,26 @@ services:
       DB_PASS: wms_pass
       DB_NAME: wms_demo
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     stdin_open: true
     tty: true
+
+  web:
+    build:
+      context: ..
+      dockerfile: docker_wms/Dockerfile.web
+    environment:
+      DJANGO_SETTINGS_MODULE: wms_project.settings
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: wms_user
+      DB_PASS: wms_pass
+      DB_NAME: wms_demo
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   db_data:

@@ -1,0 +1,23 @@
+FROM python:3.10-slim
+WORKDIR /app
+
+# Install OS-level dependencies for barcode generation & mysqlclient
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gcc \
+        default-libmysqlclient-dev \
+        pkg-config \
+        libjpeg-dev \
+        zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install Python dependencies
+COPY ../requirements.txt ./
+# Install all requirements including mysqlclient
+RUN pip install --no-cache-dir -r requirements.txt mysqlclient
+
+# Copy application code
+COPY ../src/barcode_menu.py ./barcode_menu.py
+
+# Default entrypoint for CLI operations
+ENTRYPOINT ["python", "barcode_menu.py"]

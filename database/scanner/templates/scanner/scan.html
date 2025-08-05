@@ -1,0 +1,100 @@
+{% extends "scanner/base.html" %}
+{% block content %}
+  <h1>Scan Barcode</h1>
+
+  <!-- Preview area -->
+  <div id="scanned-preview" style="border:1px solid #ccc; padding:8px; min-height:1.5em;">
+    <em>No code scanned yet.</em>
+  </div>
+
+  <!-- Controls -->
+  <p>
+    <!-- Keyboard Wedge is always “on” by the hidden input below -->
+    <button id="connect-serial">Connect via Web Serial</button>
+    <span id="serial-status" style="margin-left:1em;color:red;">Serial disconnected</span>
+  </p>
+
+  <!-- Submit Form -->
+  <form method="post" id="scan-form" style="margin-top:1em;">
+    {% csrf_token %}
+    <input type="hidden" name="code" id="id_code" value="" />
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Hidden capture input for keyboard wedge -->
+  <input type="text" id="capture-input"
+         style="position:absolute;left:-1000px;top:-1000px;" autocomplete="off">
+
+  <script>
+  (() => {
+    const preview = document.getElementById('scanned-preview');
+    const hidden  = document.getElementById('id_code');
+    const capture = document.getElementById('capture-input');
+    const btn     = document.getElementById('connect-serial');
+    const status  = document.getElementById('serial-status');
+
+    // 1) KEYBOARD‑WEDGE: always focus this and listen
+    capture.focus();
+    setInterval(()=> capture.focus(), 500);
+    capture.addEventListener('keydown', e => {
+      if (e.key==='Enter') {
+        e.preventDefault();
+        const code = capture.value.trim();
+        capture.value = '';
+        preview.textContent = code||'<no data>';
+        hidden.value = code;
+      }
+    });
+    capture.addEventListener('input', () => {
+      preview.textContent = capture.value;
+    });
+
+    // 2) WEB SERIAL: if browser supports it
+    let port, reader, decoding;
+    if ('serial' in navigator) {
+      btn.addEventListener('click', async () => {
+        try {
+          port = await navigator.serial.requestPort();
+          await port.open({ baudRate: 9600 });
+          status.textContent='Serial connected'; status.style.color='green';
+
+          // pipe to text
+          decoding = port.readable.pipeThrough(new TextDecoderStream());
+          reader   = decoding.getReader();
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            const val = value.trim();
+            if (val) {
+              preview.textContent = val;
+              hidden.value = val;
+            }
+          }
+        } catch(err) {
+          console.error(err);
+          status.textContent='Serial error';
+        }
+      });
+    } else {
+      btn.disabled = true;
+      status.textContent = 'Web Serial not supported';
+    }
+
+    // 3) SSE FALLBACK: connect to /scan-stream/
+    try {
+      const es = new EventSource("{% url 'scan_stream' %}");
+      es.onmessage = e => {
+        const code = e.data;
+        preview.textContent = code;
+        hidden.value = code;
+      };
+      es.onerror = _ => {
+        console.warn('SSE stream closed');
+        es.close();
+      };
+    } catch(e) {
+      console.warn('SSE not available', e);
+    }
+  })();
+  </script>
+{% endblock %}

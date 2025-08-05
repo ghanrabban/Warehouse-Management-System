@@ -1,0 +1,8 @@
+<h1>Manual Barcode Entry</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Submit</button>
+  {% block content %}
+{% endblock %}
+</form>

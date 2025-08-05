@@ -1,3 +1,6 @@
 pyserial
 python-barcode
 mysql-connector-python
+Django>=4.2
+django-debug-toolbar>=4.0
+mysqlclient

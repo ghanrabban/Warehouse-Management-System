@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head><title>Scanned Events</title></head>
+  <body>
+{% extends "scanner/base.html" %}
+
+{% block content %}
+  <h1>Last 50 Events</h1>
+  <p>
+    <a href="{% url 'scan' %}">Scan Barcode</a> |
+    <a href="{% url 'manual' %}">Manual Input</a> |
+    <a href="{% url 'generate' %}">Generate Barcode</a> |
+    <a href="/admin/">Admin</a>
+  </p>
+
+  <table border="1" cellpadding="4">
+    <tr>
+      <th>Code</th>
+      <th>Source</th>
+      <th>User</th>
+      <th>Shift</th>
+      <th>When</th>
+    </tr>
+    {% for e in events %}
+      <tr>
+        <td>{{ e.code }}</td>
+        <td>{{ e.get_source_display }}</td>
+        <td>
+          {% if e.user %}
+            {{ e.user.username }}
+          {% else %}
+            &mdash;
+          {% endif %}
+        </td>
+        <td>{{ e.get_shift_display }}</td>
+        <td>{{ e.created_at }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5">No events found.</td></tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+

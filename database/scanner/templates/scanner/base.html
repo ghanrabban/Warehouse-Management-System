@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><title>Warehouse Management</title></head>
+<body>
+  <nav>
+    <a href="{% url 'scan' %}">Scan Barcode</a> |
+    <a href="{% url 'manual' %}">Manual Input</a> |
+    <a href="{% url 'generate' %}">Generate Barcode</a> |
+    <a href="{% url 'event_list' %}">Events</a> |
+    <a href="/admin/">Admin</a>
+  </nav>
+  <hr/>
+  {% block content %}
+  <h1>Scan Barcode</h1>
+  <p>Use your barcode scanner; focus is on the input below.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.code.label_tag }}<br/>
+    {{ form.code }}<br/>
+    <small>{{ form.code.help_text }}</small><br/>
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}
+</body>
+</html>
