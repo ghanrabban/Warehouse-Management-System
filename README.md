@@ -160,6 +160,15 @@ After that, you need to build a conternizer Docker Container
 docker compose up --build
 ```
 
+<<<<<<< HEAD
+=======
+## How to MIgrate Docker MySQL into Django after Setting the DB
+```
+python manage.py migrate
+```
+
+
+>>>>>>> c568b89 (Major update 1.1)
 ## How to Run a Debug Server
 Open the specific directory
 ```
@@ -176,7 +185,10 @@ http://127.0.0.1:8001/
 
 #### MySQL Django debug command
 ```
-mysql -h 127.0.0.1 -P 3306 -u wms_user -pwms_pass wms_demo
+mysql -h 127.0.0.1 -P 3306 -u wms_user -p wms_pass wms_demo
+```
+```
+mysql -h 127.0.0.1 -P 3306 -u inventory_db -p inventory_pass inventory_db
 ```
 ```
 SELECT * FROM scanned_barcodes;
@@ -199,3 +211,10 @@ admin_elektronika_t3
 Create an import/export PDF report mechanism inside "History" tab or "Events" tab
 
 Create the availabe stock indicator (red, yellow, green)
+<<<<<<< HEAD
+=======
+
+For UI/UX tweak:
+In the ITEM IN and ITEM OUT menu, adding the option for scan the barcode and manual input
+
+>>>>>>> c568b89 (Major update 1.1)

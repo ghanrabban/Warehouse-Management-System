@@ -11,6 +11,7 @@
     <a href="{% url 'manual' %}">Manual Input</a> |
     <a href="{% url 'generate' %}">Generate Barcode</a> |
     <a href="/admin/">Admin</a>
+    <a href="{% url 'export_events_pdf' %}" class="button">Export as PDF</a>
   </p>
 
   <table border="1" cellpadding="4">
@@ -39,5 +40,15 @@
       <tr><td colspan="5">No events found.</td></tr>
     {% endfor %}
   </table>
+
+  <h2>Import PDF Report</h2>
+  <form method="post" enctype="multipart/form-data" action="{% url 'import_report' %}">
+    {% csrf_token %}
+    {{ upload_form.file }}
+    <button type="submit">Upload PDF</button>
+  </form>
+
+  <h2>Events</h2>
+  <table>… your existing table …</table>
 {% endblock %}
 

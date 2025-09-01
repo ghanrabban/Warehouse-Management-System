@@ -15,3 +15,7 @@ docker/db_data/
 # IDEs
 .vscode/
 .idea/
+
+# Conda env
+env/
+.conda/

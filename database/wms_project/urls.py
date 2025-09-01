@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 
+
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", include("scanner.urls")),
+    path('admin/', admin.site.urls),
+    path('', include('scanner.urls')),   # ← your app’s urls.py
 ]
+
 
 # Debug toolbar URLs
 if settings.DEBUG:

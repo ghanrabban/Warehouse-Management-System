@@ -3,6 +3,7 @@ from barcode import get_barcode_class
 from barcode.writer import ImageWriter
 from .models import BarcodeEvent
 import os, random
+from .models import Report
 
 class GenerateBarcodeForm(forms.Form):
     TYPE_CHOICES = [("ean13","EAN-13"), ("code128","Code128")]
@@ -58,3 +59,11 @@ class ScanForm(forms.Form):
         widget=forms.TextInput(attrs={"autofocus": True}),
         help_text="Use your barcode scanner to scan directly into this field."
     )
+
+class ReportUploadForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ['file']
+        widgets = {
+          'file': forms.ClearableFileInput(attrs={'accept': '.pdf'})
+        }

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import DailyRoster, BarcodeEvent
+from .models import DailyRoster, BarcodeEvent, Report
 
 @admin.register(DailyRoster)
 class DailyRosterAdmin(admin.ModelAdmin):
@@ -15,3 +15,7 @@ class BarcodeEventAdmin(admin.ModelAdmin):
     list_display = ('code','source','user','shift','created_at')
     list_filter  = ('source','shift','created_at')
     search_fields = ('code','user__username')
+
+@admin.register(Report)
+class ReportAdmin(admin.ModelAdmin):
+    list_display = ('id','uploaded_at','file')

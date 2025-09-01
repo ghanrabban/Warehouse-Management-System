@@ -1,21 +1,40 @@
+version: '3.8'
 services:
   db:
-    image: mysql:8
+    image: mysql:8.0
+    container_name: wms_mysql
     restart: unless-stopped
+    #command: --skip-grant-tables # THIS IS TEMPORARY DEBUG, REMOVE THIS BEFORE DEPLOYMENT
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: wms_demo
-      MYSQL_USER: wms_user
-      MYSQL_PASSWORD: wms_pass
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: inventory_root_pass
+      MYSQL_PASSWORD: inventory_pass
+      MYSQL_DATABASE: inventory_db
+      MYSQL_USER: inventory_user
+    volumes:
+      - wms_mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-psecret"]
-      interval: 5s
-      timeout: 3s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
       retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: wms_phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: inventory_user
+      PMA_PASSWORD: inventory_pass
+      UPLOAD_LIMIT: 300M
+    ports:
+      - "8080:80"
 
   app:
     build:
@@ -50,4 +69,4 @@ services:
         condition: service_healthy
 
 volumes:
-  db_data:
+  wms_mysql_data:
